@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PantryMate.API.Models.Request;
+using PantryMate.API.Models.Response;
 using PantryMate.API.Repositories;
+using PantryMate.API.Services;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PantryMate.API.Controllers
 {
@@ -10,13 +15,24 @@ namespace PantryMate.API.Controllers
     [Route("api/v1/profile")]
     public class ProfileController : BaseController
     {
-        private readonly IAccountService _accountService;
-        private readonly IMapper _mapper;
+        private readonly IProfileService _profileService;
 
-        public ProfileController(IAccountService accountService, IMapper mapper)
+        public ProfileController(IProfileService profileService)
         {
-            _accountService = accountService;
-            _mapper = mapper;
+            _profileService = profileService;
+        }
+
+        [HttpPut("{accountId}")]
+        public async Task<ActionResult<ProfileResponse>> UpdateProfile(int accountId, UpdateProfileRequest request)
+        {
+            if (Account == null || accountId != Account.AccountId)
+            {
+                return Unauthorized(new { message = "Unauthorized" });
+            }
+
+            var profile = await _profileService.UpdateProfile(accountId, request);
+
+            return Ok(profile);
         }
     }
 }

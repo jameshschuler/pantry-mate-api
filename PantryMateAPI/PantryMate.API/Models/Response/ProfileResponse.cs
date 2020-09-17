@@ -1,4 +1,6 @@
-﻿namespace PantryMate.API.Models.Response
+﻿using System;
+
+namespace PantryMate.API.Models.Response
 {
     public class ProfileResponse
     {
@@ -7,5 +9,6 @@
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
+        public DateTime UpdatedOn { get; set; }
     }
 }

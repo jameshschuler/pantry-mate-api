@@ -15,6 +15,7 @@ namespace PantryMate.API.Repositories
         Task<Account> Authenticate(string username, string password);
         Task<Account> Create(Account account, string password);
         Task<AccountResponse> GetById(int accountId);
+        Task<Account> VerifyAccount(int accountId);
     }
 
     public class AccountService : IAccountService
@@ -95,6 +96,11 @@ namespace PantryMate.API.Repositories
             }
 
             return null;
+        }
+
+        public async Task<Account> VerifyAccount(int accountId)
+        {
+            return await _context.Account.FirstOrDefaultAsync(e => e.AccountId == accountId);
         }
     }
 }

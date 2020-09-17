@@ -8,7 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using PantryMate.API.Helpers;
+using PantryMate.API.Middleware;
 using PantryMate.API.Repositories;
+using PantryMate.API.Services;
 using System;
 using System.Text;
 
@@ -32,6 +34,8 @@ namespace PantryMate.API
 
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IInventoryService, InventoryService>();
 
             services.AddCors();
             services.AddControllers();
@@ -56,9 +60,9 @@ namespace PantryMate.API
                 {
                     OnTokenValidated = async context =>
                     {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IAccountService>();
+                        var accountService = context.HttpContext.RequestServices.GetRequiredService<IAccountService>();
                         var accountId = int.Parse(context.Principal.Identity.Name);
-                        var account = await userService.GetById(accountId);
+                        var account = await accountService.VerifyAccount(accountId);
 
                         if (account == null)
                         {
@@ -100,6 +104,9 @@ namespace PantryMate.API
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
+
+            // global error handler
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();

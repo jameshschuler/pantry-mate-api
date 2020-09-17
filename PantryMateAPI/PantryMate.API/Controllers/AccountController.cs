@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using PantryMate.API.Entities;
 using PantryMate.API.Helpers;
 using PantryMate.API.Models.Request;
+using PantryMate.API.Models.Response;
 using PantryMate.API.Repositories;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -59,7 +60,7 @@ namespace PantryMate.API.Controllers
         }
 
         [HttpGet("{accountId}")]
-        public async Task<IActionResult> GetById(int accountId)
+        public async Task<ActionResult<AccountResponse>> GetById(int accountId)
         {
             if (Account == null || Account.AccountId != accountId)
             {

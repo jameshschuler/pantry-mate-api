@@ -12,6 +12,10 @@ namespace PantryMate.API.Helpers
             CreateMap<Account, AccountResponse>();
             CreateMap<RegisterRequest, Account>();
             CreateMap<Entities.Profile, ProfileResponse>();
+            CreateMap<UpdateProfileRequest, Entities.Profile>();
+
+            CreateMap<CreateInventoryRequest, Inventory>();
+            CreateMap<Inventory, InventoryResponse>();
         }
     }
 }
