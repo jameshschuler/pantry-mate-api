@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PantryMate.API.Entities;
 using PantryMate.API.Helpers;
 using PantryMate.API.Models.Request;
@@ -13,6 +14,9 @@ namespace PantryMate.API.Services
     public interface IInventoryService
     {
         Task<InventoryResponse> CreateInventory(int accountId, CreateInventoryRequest request);
+        Task DeleteInventory(int accountId, int inventoryId);
+        IList<InventoryResponse> GetAll(int accountId);
+        Task<InventoryResponse> GetInventory(int accountId, int inventoryId);
     }
 
     public class InventoryService : IInventoryService
@@ -42,6 +46,32 @@ namespace PantryMate.API.Services
 
             _context.Inventory.Add(inventory);
             await _context.SaveChangesAsync();
+
+            return _mapper.Map<InventoryResponse>(inventory);
+        }
+
+        public async Task DeleteInventory(int accountId, int inventoryId)
+        {
+            var inventory = await _context.Inventory.FirstOrDefaultAsync(e => e.AccountId == accountId && e.InventoryId == inventoryId);
+
+            if (inventory == null)
+            {
+                throw new KeyNotFoundException($"Inventory not found for id: {inventoryId}");
+            }
+
+            _context.Inventory.Remove(inventory);
+            await _context.SaveChangesAsync();
+        }
+
+        public IList<InventoryResponse> GetAll(int accountId)
+        {
+            var inventories = _context.Inventory.Where(e => e.AccountId == accountId);
+            return _mapper.Map<IList<InventoryResponse>>(inventories);
+        }
+
+        public async Task<InventoryResponse> GetInventory(int accountId, int inventoryId)
+        {
+            var inventory = await _context.Inventory.FirstOrDefaultAsync(e => e.AccountId == accountId && e.InventoryId == inventoryId);
 
             return _mapper.Map<InventoryResponse>(inventory);
         }

@@ -22,15 +22,15 @@ namespace PantryMate.API.Controllers
             _profileService = profileService;
         }
 
-        [HttpPut("{accountId}")]
-        public async Task<ActionResult<ProfileResponse>> UpdateProfile(int accountId, UpdateProfileRequest request)
+        [HttpPut]
+        public async Task<ActionResult<ProfileResponse>> UpdateProfile(UpdateProfileRequest request)
         {
-            if (Account == null || accountId != Account.AccountId)
+            if (Account == null)
             {
                 return Unauthorized(new { message = "Unauthorized" });
             }
 
-            var profile = await _profileService.UpdateProfile(accountId, request);
+            var profile = await _profileService.UpdateProfile(Account.AccountId, request);
 
             return Ok(profile);
         }

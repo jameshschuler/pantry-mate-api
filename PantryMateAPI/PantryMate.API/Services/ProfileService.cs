@@ -31,8 +31,6 @@ namespace PantryMate.API.Services
 
             _mapper.Map(request, profile);
 
-            profile.UpdatedOn = DateTime.Now;
-
             _context.Profile.Update(profile);
             await _context.SaveChangesAsync();
 

@@ -77,7 +77,6 @@ namespace PantryMate.API.Repositories
 
             account.Active = true;
             account.PasswordHash = BC.HashPassword(password);
-            account.CreatedOn = DateTime.Now;
             account.Profile = new Entities.Profile { AccountID = account.AccountId };
 
             _context.Account.Add(account);
