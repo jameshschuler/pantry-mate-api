@@ -15,7 +15,7 @@ namespace PantryMate.API.Services
     {
         Task<InventoryResponse> CreateInventory(int accountId, CreateInventoryRequest request);
         Task DeleteInventory(int accountId, int inventoryId);
-        IList<InventoryResponse> GetAll(int accountId);
+        IEnumerable<InventoryResponse> GetAll(int accountId);
         Task<InventoryResponse> GetInventory(int accountId, int inventoryId);
     }
 
@@ -63,15 +63,20 @@ namespace PantryMate.API.Services
             await _context.SaveChangesAsync();
         }
 
-        public IList<InventoryResponse> GetAll(int accountId)
+        public IEnumerable<InventoryResponse> GetAll(int accountId)
         {
             var inventories = _context.Inventory.Where(e => e.AccountId == accountId);
-            return _mapper.Map<IList<InventoryResponse>>(inventories);
+            return _mapper.Map<IEnumerable<InventoryResponse>>(inventories);
         }
 
         public async Task<InventoryResponse> GetInventory(int accountId, int inventoryId)
         {
             var inventory = await _context.Inventory.FirstOrDefaultAsync(e => e.AccountId == accountId && e.InventoryId == inventoryId);
+
+            if (inventory == null)
+            {
+                throw new KeyNotFoundException($"Inventory not found for id: {inventoryId}");
+            }
 
             return _mapper.Map<InventoryResponse>(inventory);
         }

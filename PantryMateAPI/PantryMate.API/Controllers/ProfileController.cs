@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PantryMate.API.Models.Request;
 using PantryMate.API.Models.Response;
-using PantryMate.API.Repositories;
 using PantryMate.API.Services;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace PantryMate.API.Controllers

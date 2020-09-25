@@ -18,6 +18,7 @@ namespace PantryMate.API
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
         public DbSet<Profile> Profile { get; set; }
+        public DbSet<Item> Item { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

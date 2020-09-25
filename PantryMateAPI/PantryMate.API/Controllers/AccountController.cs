@@ -59,20 +59,15 @@ namespace PantryMate.API.Controllers
             }
         }
 
-        [HttpGet("{accountId}")]
-        public async Task<ActionResult<AccountResponse>> GetById(int accountId)
+        [HttpGet()]
+        public async Task<ActionResult<AccountResponse>> GetAccount()
         {
-            if (Account == null || Account.AccountId != accountId)
+            if (Account == null)
             {
                 return Unauthorized(new { message = "Unauthorized" });
             }
 
-            if (accountId <= 0)
-            {
-                return BadRequest();
-            }
-
-            var account = await _accountService.GetById(accountId);
+            var account = await _accountService.GetById(Account.AccountId);
 
             if (account == null)
             {

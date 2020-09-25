@@ -51,9 +51,9 @@ CREATE TABLE item (
 	item_id serial PRIMARY KEY,
 	name VARCHAR (100) NOT NULL,
 	description VARCHAR(1000),
-	price DECIMAL NULL DEFAULT 0.00,
+	price DECIMAL DEFAULT 0.00,
 	account_id INT NOT NULL,
-	brand_id INT NOT NULL,
+	brand_id INT,
 	created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP,
 	FOREIGN KEY (brand_id) REFERENCES brand(brand_id),
@@ -70,4 +70,6 @@ CREATE TABLE inventory_item (
   	FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id) ON UPDATE CASCADE,
   	FOREIGN KEY (item_id) REFERENCES item(item_id) ON UPDATE CASCADE
 );
+---------------------------------------------------------
+
 ---------------------------------------------------------

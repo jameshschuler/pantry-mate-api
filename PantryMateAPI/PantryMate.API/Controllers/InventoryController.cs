@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using PantryMate.API.Models.Request;
 using PantryMate.API.Models.Response;
 using PantryMate.API.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PantryMate.API.Controllers
@@ -35,7 +32,7 @@ namespace PantryMate.API.Controllers
             return Ok(inventories);
         }
 
-        [HttpGet("{inventoryId}")]
+        [HttpGet("{inventoryId:int:min(1)}")]
         public async Task<ActionResult<InventoryResponse>> GetInventory(int inventoryId)
         {
             if (Account == null)
@@ -44,12 +41,6 @@ namespace PantryMate.API.Controllers
             }
 
             var inventory = await _inventoryService.GetInventory(Account.AccountId, inventoryId);
-
-            if (inventory == null)
-            {
-                return NotFound(new { message = $"Inventory not found for id: {inventoryId}" });
-            }
-
             return Ok(inventory);
         }
 
@@ -66,7 +57,7 @@ namespace PantryMate.API.Controllers
             return Created(string.Empty, inventory);
         }
 
-        [HttpDelete("{inventoryId}")]
+        [HttpDelete("{inventoryId:int:min(1)}")]
         public async Task<IActionResult> DeleteInventory(int inventoryId)
         {
             if (Account == null)

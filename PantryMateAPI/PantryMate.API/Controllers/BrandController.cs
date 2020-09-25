@@ -23,7 +23,7 @@ namespace PantryMate.API.Controllers
             return Ok(brands);
         }
 
-        [HttpGet("{brandId}")]
+        [HttpGet("{brandId:int:min(1)}")]
         public async Task<IActionResult> GetBrand(int brandId)
         {
             if (brandId <= 0)
