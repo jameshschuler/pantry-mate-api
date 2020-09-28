@@ -67,8 +67,8 @@ CREATE TABLE inventory_item (
 	inventory_id int NOT NULL,
   	item_id int NOT NULL,
   	PRIMARY KEY (inventory_id, item_id),
-  	FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id) ON UPDATE CASCADE,
-  	FOREIGN KEY (item_id) REFERENCES item(item_id) ON UPDATE CASCADE
+  	FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id) ON DELETE CASCADE,
+  	FOREIGN KEY (item_id) REFERENCES item(item_id) ON DELETE CASCADE
 );
 ---------------------------------------------------------
 

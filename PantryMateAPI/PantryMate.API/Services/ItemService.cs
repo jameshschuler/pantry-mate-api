@@ -12,9 +12,10 @@ namespace PantryMate.API.Services
     public interface IItemService
     {
         Task<ItemResponse> CreateItem(int accountId, CreateItemRequest request);
-        /*Task DeleteInventory(int accountId, int inventoryId);*/
+        Task DeleteItem(int accountId, int inventoryId);
         IEnumerable<ItemResponse> GetAll(int accountId);
         Task<ItemResponse> GetItem(int accountId, int itemId);
+        Task<ItemResponse> UpdateItem(int accountId, int itemId, UpdateItemRequest request);
     }
 
     public class ItemService : IItemService
@@ -51,6 +52,19 @@ namespace PantryMate.API.Services
             return _mapper.Map<ItemResponse>(item);
         }
 
+        public async Task DeleteItem(int accountId, int itemId)
+        {
+            var item = await _context.Item.FirstOrDefaultAsync(e => e.AccountId == accountId && e.ItemId == itemId);
+
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Item not found for id: {itemId}");
+            }
+
+            _context.Item.Remove(item);
+            await _context.SaveChangesAsync();
+        }
+
         public IEnumerable<ItemResponse> GetAll(int accountId)
         {
             var items = _context.Item.Where(e => e.AccountId == accountId).Include(e => e.Brand);
@@ -66,6 +80,23 @@ namespace PantryMate.API.Services
             {
                 throw new KeyNotFoundException($"Item not found for id: {itemId}");
             }
+
+            return _mapper.Map<ItemResponse>(item);
+        }
+
+        public async Task<ItemResponse> UpdateItem(int accountId, int itemId, UpdateItemRequest request)
+        {
+            var item = await _context.Item.FirstOrDefaultAsync(e => e.AccountId == accountId && e.ItemId == itemId);
+
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Item not found for id: {itemId}");
+            }
+
+            _mapper.Map(request, item);
+
+            _context.Item.Update(item);
+            await _context.SaveChangesAsync();
 
             return _mapper.Map<ItemResponse>(item);
         }

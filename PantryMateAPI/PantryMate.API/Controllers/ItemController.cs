@@ -48,7 +48,18 @@ namespace PantryMate.API.Controllers
             return Ok(item);
         }
 
-        // TODO: Delete item
+        [HttpDelete("{itemId:int:min(1)}")]
+        public async Task<IActionResult> DeleteInventory(int itemId)
+        {
+            if (Account == null)
+            {
+                return Unauthorized(new { message = "Unauthorized" });
+            }
+
+            await _itemService.DeleteItem(Account.AccountId, itemId);
+
+            return NoContent();
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateItem(CreateItemRequest request)
@@ -63,7 +74,18 @@ namespace PantryMate.API.Controllers
             return Created(string.Empty, item);
         }
 
-        // TODO: update item
+        [HttpPut("{itemId:int:min(1)}")]
+        public async Task<ActionResult<ProfileResponse>> UpdateItem(int itemId, UpdateItemRequest request)
+        {
+            if (Account == null)
+            {
+                return Unauthorized(new { message = "Unauthorized" });
+            }
+
+            var item = await _itemService.UpdateItem(Account.AccountId, itemId, request);
+
+            return Ok(item);
+        }
 
         // TODO: assign item to an inventory
     }
