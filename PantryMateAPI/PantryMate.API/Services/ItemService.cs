@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PantryMate.API.Entities;
+using PantryMate.API.Models.Request;
 using PantryMate.API.Models.Response;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +11,8 @@ namespace PantryMate.API.Services
 {
     public interface IItemService
     {
-        /*Task<InventoryResponse> CreateInventory(int accountId, CreateInventoryRequest request);
-        Task DeleteInventory(int accountId, int inventoryId);*/
+        Task<ItemResponse> CreateItem(int accountId, CreateItemRequest request);
+        /*Task DeleteInventory(int accountId, int inventoryId);*/
         IEnumerable<ItemResponse> GetAll(int accountId);
         Task<ItemResponse> GetItem(int accountId, int itemId);
     }
@@ -24,6 +26,29 @@ namespace PantryMate.API.Services
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<ItemResponse> CreateItem(int accountId, CreateItemRequest request)
+        {
+            Brand brand = null;
+            if ( request.BrandId != null)
+            {
+                brand = await _context.Brand.FirstOrDefaultAsync(e => e.BrandId == request.BrandId);
+                if (brand == null)
+                {
+                    throw new KeyNotFoundException($"Brand not found for id: {request.BrandId}");
+                }
+            }
+
+            var item = _mapper.Map<Item>(request);
+            item.AccountId = accountId;
+
+            _context.Item.Add(item);
+            await _context.SaveChangesAsync();
+
+            item.Brand = brand;
+
+            return _mapper.Map<ItemResponse>(item);
         }
 
         public IEnumerable<ItemResponse> GetAll(int accountId)

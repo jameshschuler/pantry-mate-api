@@ -20,6 +20,7 @@ namespace PantryMate.API.Helpers
 
             CreateMap<Item, ItemResponse>()
                 .ForMember(e => e.Brand, opt => opt.MapFrom(e => e.Brand.Name));
+            CreateMap<CreateItemRequest, Item>();
         }
     }
 }

@@ -50,7 +50,18 @@ namespace PantryMate.API.Controllers
 
         // TODO: Delete item
 
-        // TODO: create item
+        [HttpPost]
+        public async Task<IActionResult> CreateItem(CreateItemRequest request)
+        {
+            if (Account == null)
+            {
+                return Unauthorized(new { message = "Unauthorized" });
+            }
+
+            var item = await _itemService.CreateItem(Account.AccountId, request);
+
+            return Created(string.Empty, item);
+        }
 
         // TODO: update item
 
