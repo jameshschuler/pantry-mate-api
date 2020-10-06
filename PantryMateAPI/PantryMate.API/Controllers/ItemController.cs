@@ -86,7 +86,5 @@ namespace PantryMate.API.Controllers
 
             return Ok(item);
         }
-
-        // TODO: assign item to an inventory
     }
 }

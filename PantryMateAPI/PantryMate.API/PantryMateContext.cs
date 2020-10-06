@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PantryMate.API.Controllers;
 using PantryMate.API.Entities;
 using System;
 using System.Linq;
@@ -19,9 +20,23 @@ namespace PantryMate.API
         public DbSet<Inventory> Inventory { get; set; }
         public DbSet<Profile> Profile { get; set; }
         public DbSet<Item> Item { get; set; }
+        public DbSet<InventoryItem> InventoryItem { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<InventoryItem>()
+                 .HasKey(e => new { e.InventoryId, e.ItemId });
+
+            modelBuilder.Entity<InventoryItem>()
+                .HasOne(e => e.Item)
+                .WithMany(e => e.InventoryItems)
+                .HasForeignKey(e => e.ItemId);
+
+            modelBuilder.Entity<InventoryItem>()
+                .HasOne(e => e.Inventory)
+                .WithMany(e => e.InventoryItems)
+                .HasForeignKey(e => e.InventoryId);
+
             base.OnModelCreating(modelBuilder);
         }
 

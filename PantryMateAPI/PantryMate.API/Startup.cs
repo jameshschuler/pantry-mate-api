@@ -1,10 +1,13 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using PantryMate.API.Helpers;
@@ -12,7 +15,10 @@ using PantryMate.API.Middleware;
 using PantryMate.API.Repositories;
 using PantryMate.API.Services;
 using System;
+using System.IO;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace PantryMate.API
 {
@@ -40,6 +46,7 @@ namespace PantryMate.API
 
             services.AddCors();
             services.AddControllers();
+            services.AddHealthChecks();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // configure strongly typed settings objects
@@ -115,7 +122,45 @@ namespace PantryMate.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+                {
+                    ResponseWriter = WriteResponse
+                });
             });
+        }
+
+        private static Task WriteResponse(HttpContext context, HealthReport result)
+        {
+            var options = new JsonWriterOptions
+            {
+                Indented = true
+            };
+
+            using var stream = new MemoryStream();
+            using (var writer = new Utf8JsonWriter(stream, options))
+            {
+                writer.WriteStartObject();
+                writer.WriteString("status", result.Status.ToString());
+                writer.WriteStartObject("results");
+                foreach (var entry in result.Entries)
+                {
+                    writer.WriteStartObject(entry.Key);
+                    writer.WriteString("status", entry.Value.Status.ToString());
+                    writer.WriteString("description", entry.Value.Description);
+                    writer.WriteStartObject("data");
+                    foreach (var item in entry.Value.Data)
+                    {
+                        writer.WritePropertyName(item.Key);
+                        JsonSerializer.Serialize(writer, item.Value, item.Value?.GetType() ?? typeof(object));
+                    }
+                    writer.WriteEndObject();
+                    writer.WriteEndObject();
+                }
+                writer.WriteEndObject();
+                writer.WriteEndObject();
+            }
+
+            return context.Response.WriteAsync(Encoding.UTF8.GetString(stream.ToArray()));
         }
     }
 }

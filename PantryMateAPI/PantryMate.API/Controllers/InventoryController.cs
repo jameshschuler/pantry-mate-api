@@ -69,5 +69,17 @@ namespace PantryMate.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{inventoryId:int:min(1)}/assignItems")]
+        public async Task<IActionResult> AssignItemsToInventory(int inventoryId, AssignItemRequest request)
+        {
+            if (Account == null)
+            {
+                return Unauthorized(new { message = "Unauthorized" });
+            }
+
+            var response = await _inventoryService.AssignItemsToInventory(Account.AccountId, inventoryId, request);
+            return Created(string.Empty, response);
+        }
     }
 }
