@@ -10,11 +10,11 @@
             {
                 if (TotalItemCount == AssignedItemCount)
                 {
-                    return $"Assigned {AssignedItemCount} items.";
+                    return $"Successfully assigned {AssignedItemCount} item(s).";
                 } 
                 else
                 {
-                    return $"Assigned {AssignedItemCount} items out of {TotalItemCount}.";
+                    return $"Successfully assigned {AssignedItemCount} item(s) out of {TotalItemCount}.";
                 }
             }
         }

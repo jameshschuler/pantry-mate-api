@@ -44,6 +44,18 @@ namespace PantryMate.API.Controllers
             return Ok(inventory);
         }
 
+        [HttpGet("{inventoryId:int:min(1)}/item")]
+        public async Task<ActionResult<ItemResponse[]>> GetInventoryItems(int inventoryId)
+        {
+            if (Account == null)
+            {
+                return Unauthorized(new { message = "Unauthorized" });
+            }
+
+            var inventoryItems = await _inventoryService.GetInventoryItems(Account.AccountId, inventoryId);
+            return Ok(inventoryItems);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateInventory(CreateInventoryRequest request)
         {

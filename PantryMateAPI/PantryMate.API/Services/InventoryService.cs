@@ -19,6 +19,7 @@ namespace PantryMate.API.Services
         Task DeleteInventory(int accountId, int inventoryId);
         IEnumerable<InventoryResponse> GetAll(int accountId);
         Task<InventoryResponse> GetInventory(int accountId, int inventoryId);
+        Task<IEnumerable<ItemResponse>> GetInventoryItems(int accountId, int inventoryId);
     }
 
     public class InventoryService : IInventoryService
@@ -52,6 +53,11 @@ namespace PantryMate.API.Services
 
                     assignedItemCount++;
                 }
+            }
+
+            if (assignedItemCount == 0)
+            {
+                throw new AppException("No items were assigned.");
             }
 
             await _context.SaveChangesAsync();
@@ -104,13 +110,31 @@ namespace PantryMate.API.Services
             return _mapper.Map<InventoryResponse>(inventory);
         }
 
-        private async Task<Inventory> GetUserInventory(int accountId, int inventoryId, bool includeItems = false)
+        public async Task<IEnumerable<ItemResponse>> GetInventoryItems(int accountId, int inventoryId)
+        {
+            var inventory = await GetUserInventory(accountId, inventoryId, true, true);
+            var items = inventory.InventoryItems.Select(e => e.Item);
+            
+            return _mapper.Map<IEnumerable<ItemResponse>>(items);
+        }
+
+        private async Task<Inventory> GetUserInventory(int accountId, int inventoryId, bool includeInventoryItems = false, bool includeInventoryItemItem = false)
         {
             Inventory inventory;
-            if (includeItems)
+            var includedProperties = string.Empty;
+
+            if (includeInventoryItems)
             {
-                inventory = await _context.Inventory.Include(e => e.InventoryItems).FirstOrDefaultAsync(e => e.AccountId == accountId && e.InventoryId == inventoryId);
-            } 
+                var s = "InventoryItems";
+
+                if (includeInventoryItemItem)
+                {
+                    s = "InventoryItems.Item.Brand";
+                }
+
+                includedProperties = s;
+                inventory = await _context.Inventory.Include(includedProperties).FirstOrDefaultAsync(e => e.AccountId == accountId && e.InventoryId == inventoryId);
+            }
             else
             {
                 inventory = await _context.Inventory.FirstOrDefaultAsync(e => e.AccountId == accountId && e.InventoryId == inventoryId);
