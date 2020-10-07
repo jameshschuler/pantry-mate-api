@@ -44,7 +44,12 @@ namespace PantryMate.API.Services
             {
                 if (!assignedItemIds.Contains(item.ItemId))
                 {
-                    //TODO: inventory.Items.Add(item);
+                    inventory.InventoryItems.Add(new InventoryItem
+                    {
+                        ItemId = item.ItemId,
+                        InventoryId = inventory.InventoryId
+                    });
+
                     assignedItemCount++;
                 }
             }

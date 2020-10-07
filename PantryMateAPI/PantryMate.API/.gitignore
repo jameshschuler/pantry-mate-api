@@ -1,6 +1,6 @@
 ﻿appsettings.json
 appsettings.Development.json
-Properties/PublishProfiles/
+Properties/
 
 *.swp
 *.*~
