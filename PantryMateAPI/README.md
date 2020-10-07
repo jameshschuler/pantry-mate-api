@@ -2,6 +2,11 @@
 
 RESTful API for supporting the Pantry Mate app.
 
-## TODO:
+### TODO:
 
-[] - Unassign items from an inventory
+[ ] - Unassign items from an inventory
+
+## Roadmap
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
