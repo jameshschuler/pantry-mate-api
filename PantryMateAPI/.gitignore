@@ -1,6 +1,6 @@
 .vs/
 PantryMate.API.Test/[Bb]in/*
-clsPantryMate.API.Test/[Oo]bj/*
+PantryMate.API.Test/[Oo]bj/*
 PantryMate.API.Test/[Dd]ebug/
 
 PantryMate.API/[Bb]in/*
