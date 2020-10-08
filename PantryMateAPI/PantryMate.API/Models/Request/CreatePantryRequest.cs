@@ -2,7 +2,7 @@
 
 namespace PantryMate.API.Models.Request
 {
-    public class CreateInventoryRequest
+    public class CreatePantryRequest
     {
         [Required]
         [MaxLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]

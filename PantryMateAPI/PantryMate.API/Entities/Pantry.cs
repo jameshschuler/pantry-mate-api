@@ -2,21 +2,18 @@
 
 namespace PantryMate.API.Entities
 {
-    public class Item : BaseEntity
+    public class Pantry : BaseEntity
     {
-        public Item()
+        public Pantry()
         {
             PantryItems = new List<PantryItem>();
         }
 
-        public int ItemId { get; set; }
+        public int PantryId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int AccountId { get; set; }
-        public int? BrandId { get; set; }
-        public decimal? Price { get; set; }
 
-        public virtual Brand Brand { get; set; }
         public virtual ICollection<PantryItem> PantryItems { get; set; }
     }
 }

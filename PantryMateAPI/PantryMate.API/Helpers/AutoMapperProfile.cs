@@ -15,8 +15,8 @@ namespace PantryMate.API.Helpers
             CreateMap<Entities.Profile, ProfileResponse>();
             CreateMap<UpdateProfileRequest, Entities.Profile>();
 
-            CreateMap<CreateInventoryRequest, Inventory>();
-            CreateMap<Inventory, InventoryResponse>();
+            CreateMap<CreatePantryRequest, Pantry>();
+            CreateMap<Pantry, PantryResponse>();
 
             CreateMap<Item, ItemResponse>()
                 .ForMember(e => e.Brand, opt => opt.MapFrom(e => e.Brand.Name));

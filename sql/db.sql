@@ -35,9 +35,9 @@ CREATE TABLE profile (
 	FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
 );
 ---------------------------------------------------------
-DROP TABLE IF EXISTS inventory;
-CREATE TABLE inventory (
-	inventory_id serial PRIMARY KEY,
+DROP TABLE IF EXISTS pantry;
+CREATE TABLE pantry (
+	pantry_id serial PRIMARY KEY,
 	name VARCHAR (100) NOT NULL,
 	description VARCHAR(1000),
 	account_id INT NOT NULL,
@@ -60,14 +60,14 @@ CREATE TABLE item (
 	FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
 );
 ---------------------------------------------------------
-DROP TABLE IF EXISTS inventory_item;
-CREATE TABLE inventory_item (
+DROP TABLE IF EXISTS pantry_item;
+CREATE TABLE pantry_item (
 	created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP,
-	inventory_id int NOT NULL,
+	pantry_id int NOT NULL,
   	item_id int NOT NULL,
-  	PRIMARY KEY (inventory_id, item_id),
-  	FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id) ON DELETE CASCADE,
+  	PRIMARY KEY (pantry_id, item_id),
+  	FOREIGN KEY (pantry_id) REFERENCES pantry(pantry_id) ON DELETE CASCADE,
   	FOREIGN KEY (item_id) REFERENCES item(item_id) ON DELETE CASCADE
 );
 ---------------------------------------------------------

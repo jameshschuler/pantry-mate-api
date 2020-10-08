@@ -12,7 +12,7 @@ namespace PantryMate.API.Services
     public interface IItemService
     {
         Task<ItemResponse> CreateItem(int accountId, CreateItemRequest request);
-        Task DeleteItem(int accountId, int inventoryId);
+        Task DeleteItem(int accountId, int pantryId);
         IEnumerable<ItemResponse> GetAll(int accountId);
         Task<ItemResponse> GetItem(int accountId, int itemId);
         Task<ItemResponse> UpdateItem(int accountId, int itemId, UpdateItemRequest request);

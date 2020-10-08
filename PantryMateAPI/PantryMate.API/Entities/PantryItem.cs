@@ -1,11 +1,11 @@
 ﻿namespace PantryMate.API.Entities
 {
-    public class InventoryItem
+    public class PantryItem
     {
         public int ItemId { get; set; }
-        public int InventoryId { get; set; }
+        public int PantryId { get; set; }
 
         public virtual Item Item { get; set; }
-        public virtual Inventory Inventory { get; set; }
+        public virtual Pantry Pantry { get; set; }
     }
 }

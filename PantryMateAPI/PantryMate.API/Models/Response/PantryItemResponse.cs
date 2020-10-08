@@ -1,6 +1,6 @@
 ﻿namespace PantryMate.API.Models.Response
 {
-    public class InventoryItemResponse
+    public class PantryItemResponse
     {
         public ItemResponse[] Items { get; set; }
     }

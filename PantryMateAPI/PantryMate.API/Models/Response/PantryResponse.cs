@@ -2,9 +2,9 @@
 
 namespace PantryMate.API.Models.Response
 {
-    public class InventoryResponse
+    public class PantryResponse
     {
-        public int InventoryId { get; set; }
+        public int PantryId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedON { get; set; }

@@ -17,25 +17,25 @@ namespace PantryMate.API
 
         public DbSet<Account> Account { get; set; }
         public DbSet<Brand> Brand { get; set; }
-        public DbSet<Inventory> Inventory { get; set; }
+        public DbSet<Pantry> Pantry { get; set; }
         public DbSet<Profile> Profile { get; set; }
         public DbSet<Item> Item { get; set; }
-        public DbSet<InventoryItem> InventoryItem { get; set; }
+        public DbSet<PantryItem> PantryItem { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<InventoryItem>()
-                 .HasKey(e => new { e.InventoryId, e.ItemId });
+            modelBuilder.Entity<PantryItem>()
+                 .HasKey(e => new { e.PantryId, e.ItemId });
 
-            modelBuilder.Entity<InventoryItem>()
+            modelBuilder.Entity<PantryItem>()
                 .HasOne(e => e.Item)
-                .WithMany(e => e.InventoryItems)
+                .WithMany(e => e.PantryItems)
                 .HasForeignKey(e => e.ItemId);
 
-            modelBuilder.Entity<InventoryItem>()
-                .HasOne(e => e.Inventory)
-                .WithMany(e => e.InventoryItems)
-                .HasForeignKey(e => e.InventoryId);
+            modelBuilder.Entity<PantryItem>()
+                .HasOne(e => e.Pantry)
+                .WithMany(e => e.PantryItems)
+                .HasForeignKey(e => e.PantryId);
 
             base.OnModelCreating(modelBuilder);
         }

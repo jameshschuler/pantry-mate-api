@@ -37,7 +37,7 @@ namespace PantryMate.API.Controllers
         }
 
         [HttpGet("{itemId:int:min(1)}")]
-        public async Task<ActionResult<InventoryResponse>> GetItem(int itemId)
+        public async Task<ActionResult<ItemResponse>> GetItem(int itemId)
         {
             if (Account == null)
             {
@@ -49,7 +49,7 @@ namespace PantryMate.API.Controllers
         }
 
         [HttpDelete("{itemId:int:min(1)}")]
-        public async Task<IActionResult> DeleteInventory(int itemId)
+        public async Task<IActionResult> DeleteItem(int itemId)
         {
             if (Account == null)
             {

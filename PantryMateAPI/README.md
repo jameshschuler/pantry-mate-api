@@ -6,8 +6,7 @@ RESTful API for supporting the Pantry Mate app.
 
 - [ ] Unassign items from an inventory
 - [x] Get inventory items
-- [ ] Write some unit tests
-- [ ] Publish
+- [ ] Write some more unit tests
 
 ## Roadmap
 
