@@ -22,6 +22,17 @@ CREATE TABLE account (
 	active boolean
 );
 ---------------------------------------------------------
+DROP TABLE IF EXISTS unit_of_measure;
+CREATE TABLE unit_of_measure (
+	unit_of_measure_id serial PRIMARY KEY,
+	name VARCHAR (100) NOT NULL,
+	description VARCHAR(1000),
+	account_id INT NOT NULL,
+	created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_on TIMESTAMP,
+	FOREIGN KEY (account_id) REFERENCES account(account_id)
+);
+---------------------------------------------------------
 DROP TABLE IF EXISTS profile;
 CREATE TABLE profile (
 	profile_id serial PRIMARY KEY,
@@ -40,6 +51,7 @@ CREATE TABLE pantry (
 	pantry_id serial PRIMARY KEY,
 	name VARCHAR (100) NOT NULL,
 	description VARCHAR(1000),
+	is_shared BOOLEAN NOT NULL DEFAULT false,
 	account_id INT NOT NULL,
 	created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP,
@@ -54,9 +66,11 @@ CREATE TABLE item (
 	price DECIMAL DEFAULT 0.00,
 	account_id INT NOT NULL,
 	brand_id INT,
+	unit_of_measure_id INT,
 	created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP,
 	FOREIGN KEY (brand_id) REFERENCES brand(brand_id),
+	FOREIGN KEY (unit_of_measure_id) REFERENCES unit_of_measure(unit_of_measure_id),
 	FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
 );
 ---------------------------------------------------------
@@ -71,5 +85,15 @@ CREATE TABLE pantry_item (
   	FOREIGN KEY (item_id) REFERENCES item(item_id) ON DELETE CASCADE
 );
 ---------------------------------------------------------
-
+DROP TABLE IF EXISTS shopping_list;
+CREATE TABLE shopping_list (
+	shopping_list_id serial PRIMARY KEY,
+	name VARCHAR (100) NOT NULL,
+	description VARCHAR(1000),
+	is_shared BOOLEAN NOT NULL DEFAULT false,
+	account_id INT NOT NULL,
+	created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_on TIMESTAMP,
+	FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
+);
 ---------------------------------------------------------
