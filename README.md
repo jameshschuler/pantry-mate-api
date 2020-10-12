@@ -5,7 +5,7 @@ RESTful API for supporting the Pantry Mate app.
 ### TODO
 
 - [x] Get pantry items
-- [ ] Unassign items from a pantry
+- [x] Unassign items from a pantry
 - [ ] Update a pantry
 - [ ] Update item to support unit of measure
 - [ ] Support pantry item quantity (current, minimum)

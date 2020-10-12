@@ -91,7 +91,19 @@ namespace PantryMate.API.Controllers
             }
 
             var response = await _pantryService.AssignItemsToPantry(Account.AccountId, pantryId, request);
-            return Created(string.Empty, response);
+            return Ok(response);
+        }
+
+        [HttpPost("{pantryId:int:min(1)}/unassignItems")]
+        public async Task<IActionResult> UnassignItemsFromPantry(int pantryId, UnassignItemRequest request)
+        {
+            if (Account == null)
+            {
+                return Unauthorized(new { message = "Unauthorized" });
+            }
+
+            var response = await _pantryService.UnassignItemsFromPantry(Account.AccountId, pantryId, request);
+            return Ok(response);
         }
     }
 }

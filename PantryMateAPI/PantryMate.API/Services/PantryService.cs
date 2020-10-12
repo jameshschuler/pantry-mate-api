@@ -20,6 +20,7 @@ namespace PantryMate.API.Services
         IEnumerable<PantryResponse> GetAll(int accountId);
         Task<PantryResponse> GetPantry(int accountId, int pantryId);
         Task<IEnumerable<ItemResponse>> GetPantryItems(int accountId, int pantryId);
+        Task<UnassignItemResponse> UnassignItemsFromPantry(int accountId, int pantryId, UnassignItemRequest request);
     }
 
     public class PantryService : IPantryService
@@ -116,6 +117,48 @@ namespace PantryMate.API.Services
             var items = pantry.PantryItems.Select(e => e.Item);
             
             return _mapper.Map<IEnumerable<ItemResponse>>(items);
+        }
+
+        public async Task<UnassignItemResponse> UnassignItemsFromPantry(int accountId, int pantryId, UnassignItemRequest request)
+        {
+            var pantry = await GetUserPantry(accountId, pantryId, true);
+            
+            if (request.UnassignAllItems)
+            {
+                var count = pantry.PantryItems.Count();
+                pantry.PantryItems.Clear();
+                await _context.SaveChangesAsync();
+
+                return new UnassignItemResponse
+                {
+                    TotalItemCount = count,
+                    UnassignedItemCount = count
+                };
+            }
+
+            var unassignedItemCount = 0;
+            for (int i = pantry.PantryItems.Count - 1; i > -1; --i)
+            {
+                var item = pantry.PantryItems.ElementAt(i);
+                if (request.ItemIds.Contains(item.ItemId))
+                {
+                    pantry.PantryItems.Remove(item);
+                    unassignedItemCount++;
+                }
+            }
+
+            if (unassignedItemCount == 0)
+            {
+                throw new AppException("No items were unassigned.");
+            }
+
+            await _context.SaveChangesAsync();
+
+            return new UnassignItemResponse
+            {
+                TotalItemCount = request.ItemIds.Length,
+                UnassignedItemCount = unassignedItemCount
+            };
         }
 
         private async Task<Pantry> GetUserPantry(int accountId, int pantryId, bool includePantryItems = false, bool includePantryItemItem = false)
