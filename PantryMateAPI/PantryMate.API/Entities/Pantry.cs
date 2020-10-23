@@ -13,6 +13,7 @@ namespace PantryMate.API.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public int AccountId { get; set; }
+        public bool IsShared { get; set; }
 
         public virtual ICollection<PantryItem> PantryItems { get; set; }
     }

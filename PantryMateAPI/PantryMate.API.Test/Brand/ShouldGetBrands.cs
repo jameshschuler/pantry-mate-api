@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace PantryMate.API.Test
 {
     [TestClass]
-    public class Should_GetBrands
+    public class ShouldGetBrands
     {
         private Mock<IBrandService> _mockBrandService;
 

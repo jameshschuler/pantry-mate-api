@@ -7,6 +7,7 @@ namespace PantryMate.API.Models.Response
         public int PantryId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool IsShared { get; set; }
         public DateTime CreatedON { get; set; }
         public DateTime? UpdatedOn { get; set; }
     }

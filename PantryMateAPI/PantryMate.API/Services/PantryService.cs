@@ -20,6 +20,7 @@ namespace PantryMate.API.Services
         IEnumerable<PantryResponse> GetAll(int accountId);
         Task<PantryResponse> GetPantry(int accountId, int pantryId);
         Task<IEnumerable<ItemResponse>> GetPantryItems(int accountId, int pantryId);
+        Task UpdatePantry(int accountId, int pantryId, UpdatePantryRequest request);
         Task<UnassignItemResponse> UnassignItemsFromPantry(int accountId, int pantryId, UnassignItemRequest request);
     }
 
@@ -72,10 +73,10 @@ namespace PantryMate.API.Services
 
         public async Task<PantryResponse> CreatePantry(int accountId, CreatePantryRequest request)
         {
-            var existingUserInventories = _context.Pantry.Where(e => e.AccountId == accountId);
+            var existingUserPantries = _context.Pantry.Where(e => e.AccountId == accountId);
 
             // Check if the new pantry name is unique
-            var nameIsTaken = existingUserInventories.Any(e => e.Name == request.Name);
+            var nameIsTaken = existingUserPantries.Any(e => e.Name == request.Name);
             if (nameIsTaken)
             {
                 throw new AppException($"Pantry name '{request.Name}' is already taken.");
@@ -117,6 +118,25 @@ namespace PantryMate.API.Services
             var items = pantry.PantryItems.Select(e => e.Item);
             
             return _mapper.Map<IEnumerable<ItemResponse>>(items);
+        }
+
+        public async Task UpdatePantry(int accountId, int pantryId, UpdatePantryRequest request)
+        {
+            var pantry = await GetUserPantry(accountId, pantryId);
+
+            // Check if the new pantry name is unique
+            var existingUserPantries = _context.Pantry.Where(e => e.AccountId == accountId);
+            var nameIsTaken = existingUserPantries.Any(e => e.Name == request.Name && e.Name != pantry.Name);
+            if (nameIsTaken)
+            {
+                throw new AppException($"Pantry name '{request.Name}' is already used.");
+            }
+
+            pantry.Name = request.Name;
+            pantry.Description = request.Description;
+            pantry.IsShared = request.IsShared;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<UnassignItemResponse> UnassignItemsFromPantry(int accountId, int pantryId, UnassignItemRequest request)
