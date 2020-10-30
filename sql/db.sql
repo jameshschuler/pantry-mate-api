@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS unit_of_measure;
 CREATE TABLE unit_of_measure (
 	unit_of_measure_id serial PRIMARY KEY,
 	name VARCHAR (100) NOT NULL,
+	abbreviation VARCHAR(10),
 	description VARCHAR(1000),
 	account_id INT NOT NULL,
 	created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

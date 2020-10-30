@@ -16,6 +16,8 @@ namespace PantryMate.API.Models.Request
         [Range(0.00, 999999999, ErrorMessage = "Price cannot be less than 0.00")]
         public decimal Price { get; set; } = 0.00M;
 
+        public int? UnitOfMeasureId { get; set; }
+
         public int? BrandId { get; set; }
     }
 }

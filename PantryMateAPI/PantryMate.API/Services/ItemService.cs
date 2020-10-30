@@ -41,6 +41,16 @@ namespace PantryMate.API.Services
                 }
             }
 
+            UnitOfMeasure uom = null;
+            if (request.UnitOfMeasureId != null)
+            {
+                uom = await _context.UnitOfMeasure.FirstOrDefaultAsync(e => e.AccountId == accountId && e.UnitOfMeasureId == request.UnitOfMeasureId);
+                if (uom == null)
+                {
+                    throw new KeyNotFoundException($"Unit of Measure not found for id: {request.UnitOfMeasureId}");
+                }
+            }
+
             var item = _mapper.Map<Item>(request);
             item.AccountId = accountId;
 
@@ -48,18 +58,14 @@ namespace PantryMate.API.Services
             await _context.SaveChangesAsync();
 
             item.Brand = brand;
+            item.UnitOfMeasure = uom ?? new UnitOfMeasure();
 
             return _mapper.Map<ItemResponse>(item);
         }
 
         public async Task DeleteItem(int accountId, int itemId)
         {
-            var item = await _context.Item.FirstOrDefaultAsync(e => e.AccountId == accountId && e.ItemId == itemId);
-
-            if (item == null)
-            {
-                throw new KeyNotFoundException($"Item not found for id: {itemId}");
-            }
+            var item = await GetUserItem(accountId, itemId);
 
             _context.Item.Remove(item);
             await _context.SaveChangesAsync();
@@ -67,14 +73,18 @@ namespace PantryMate.API.Services
 
         public IEnumerable<ItemResponse> GetAll(int accountId)
         {
-            var items = _context.Item.Where(e => e.AccountId == accountId).Include(e => e.Brand);
+            var items = _context.Item.Where(e => e.AccountId == accountId)
+                .Include(e => e.Brand).Include(e => e.UnitOfMeasure);
 
             return _mapper.Map<IEnumerable<ItemResponse>>(items);
         }
 
         public async Task<ItemResponse> GetItem(int accountId, int itemId)
         {
-            var item = await _context.Item.Include(e => e.Brand).FirstOrDefaultAsync(e => e.AccountId == accountId && e.ItemId == itemId);
+            var item = await _context.Item
+                .Include(e => e.Brand)
+                .Include(e => e.UnitOfMeasure)
+                .FirstOrDefaultAsync(e => e.AccountId == accountId && e.ItemId == itemId);
             
             if (item == null)
             {
@@ -86,11 +96,24 @@ namespace PantryMate.API.Services
 
         public async Task<ItemResponse> UpdateItem(int accountId, int itemId, UpdateItemRequest request)
         {
-            var item = await _context.Item.FirstOrDefaultAsync(e => e.AccountId == accountId && e.ItemId == itemId);
+            var item = await GetUserItem(accountId, itemId);
 
-            if (item == null)
+            if (request.BrandId != null && request.BrandId != item.BrandId)
             {
-                throw new KeyNotFoundException($"Item not found for id: {itemId}");
+                var brand = await _context.Brand.FirstOrDefaultAsync(e => e.BrandId == request.BrandId);
+                if (brand == null)
+                {
+                    throw new KeyNotFoundException($"Brand not found for id: {request.BrandId}");
+                }
+            }
+
+            if (request.UnitOfMeasureId != null && request.UnitOfMeasureId != item.UnitOfMeasureId)
+            {
+                var uom = await _context.UnitOfMeasure.FirstOrDefaultAsync(e => e.AccountId == accountId && e.UnitOfMeasureId == request.UnitOfMeasureId);
+                if (uom == null)
+                {
+                    throw new KeyNotFoundException($"Unit of Measure not found for id: {request.UnitOfMeasureId}");
+                }
             }
 
             _mapper.Map(request, item);
@@ -99,6 +122,18 @@ namespace PantryMate.API.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<ItemResponse>(item);
+        }
+
+        private async Task<Item> GetUserItem(int accountId, int itemId)
+        {
+            var item = await _context.Item.FirstOrDefaultAsync(e => e.AccountId == accountId && e.ItemId == itemId);
+
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Item not found for id: {itemId}");
+            }
+
+            return item;
         }
     }
 }

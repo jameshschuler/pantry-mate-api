@@ -81,6 +81,9 @@ namespace PantryMate.API.Repositories
 
             _context.Account.Add(account);
 
+            // TODO: Account Setup
+            // Add default uoms
+
             await _context.SaveChangesAsync();
 
             return account;

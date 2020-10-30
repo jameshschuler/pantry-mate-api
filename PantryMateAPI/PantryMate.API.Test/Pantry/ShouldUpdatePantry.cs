@@ -8,6 +8,7 @@ using PantryMate.API.Entities;
 using PantryMate.API.Models.Request;
 using PantryMate.API.Models.Response;
 using PantryMate.API.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -43,12 +44,9 @@ namespace PantryMate.API.Test.Pantry
         [TestMethod]
         public async Task ShouldUpdatePantrySuccessfully()
         {
-            // TODO: need to mock pantryService.UpdatePantry?
             var accountId = 1;
             var pantryId = 1;
-
-            _mockPantryService.Setup(e => e.GetPantry(accountId, pantryId))
-                .ReturnsAsync(new PantryResponse { Name = "Test Pantry", PantryId = pantryId });
+            var request = new UpdatePantryRequest() { Name = "Test Pantry - Updated" };
 
             var controller = new PantryController(_mockPantryService.Object)
             {
@@ -58,11 +56,15 @@ namespace PantryMate.API.Test.Pantry
                 }
             };
             controller.ControllerContext.HttpContext.Items["Account"] = new Account() { AccountId = accountId };
-            
-            var updatePantryRequest = new UpdatePantryRequest() { Name = "Test Pantry - Updated" };
-            var response = await controller.UpdatePantry(pantryId, updatePantryRequest);
 
-            var result = response as ObjectResult;
+            _mockPantryService.Setup(e => e.GetPantry(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(new PantryResponse { Name = "Test Pantry", PantryId = pantryId });
+            
+            _mockPantryService.Setup(e => e.UpdatePantry(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<UpdatePantryRequest>()))
+                .Returns(Task.CompletedTask);
+              
+            var response = await controller.UpdatePantry(pantryId, request) as NoContentResult;
+            Assert.AreEqual(204, response.StatusCode);
         }
 
         private IList<ValidationResult> ValidateModel(object model)

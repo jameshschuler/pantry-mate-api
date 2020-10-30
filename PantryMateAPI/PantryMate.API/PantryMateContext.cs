@@ -21,6 +21,7 @@ namespace PantryMate.API
         public DbSet<Profile> Profile { get; set; }
         public DbSet<Item> Item { get; set; }
         public DbSet<PantryItem> PantryItem { get; set; }
+        public DbSet<UnitOfMeasure> UnitOfMeasure { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

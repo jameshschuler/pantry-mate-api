@@ -15,8 +15,10 @@ namespace PantryMate.API.Entities
         public int AccountId { get; set; }
         public int? BrandId { get; set; }
         public decimal? Price { get; set; }
+        public int? UnitOfMeasureId { get; set; }
 
         public virtual Brand Brand { get; set; }
+        public virtual UnitOfMeasure UnitOfMeasure { get; set; }
         public virtual ICollection<PantryItem> PantryItems { get; set; }
     }
 }

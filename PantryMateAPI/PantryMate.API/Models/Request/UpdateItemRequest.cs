@@ -18,5 +18,7 @@ namespace PantryMate.API.Models.Request
         public decimal Price { get; set; } = 0.00M;
 
         public int? BrandId { get; set; }
+
+        public int? UnitOfMeasureId { get; set; }
     }
 }
