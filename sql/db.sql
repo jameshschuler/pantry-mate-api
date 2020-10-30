@@ -81,6 +81,8 @@ CREATE TABLE pantry_item (
     updated_on TIMESTAMP,
 	pantry_id int NOT NULL,
   	item_id int NOT NULL,
+	current_quantity DECIMAL DEFAULT 0,
+	minimum_quantity DECIMAL DEFAULT 0,
   	PRIMARY KEY (pantry_id, item_id),
   	FOREIGN KEY (pantry_id) REFERENCES pantry(pantry_id) ON DELETE CASCADE,
   	FOREIGN KEY (item_id) REFERENCES item(item_id) ON DELETE CASCADE

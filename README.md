@@ -8,7 +8,8 @@ RESTful API for supporting the Pantry Mate app.
 - [x] Unassign items from a pantry
 - [x] Update a pantry
 - [x] Update item to support unit of measure
-- [ ] Support pantry item quantity (current, minimum)
+- [x] Support pantry item quantity (current, minimum)
+- [ ] Support updating a pantry item's quantities
 - [ ] Shopping List CRUD (including items)
 - [ ] Support shopping list item quantity (how many to buy)
 - [ ] Unit of Meaure CRUD

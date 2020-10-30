@@ -38,19 +38,23 @@ namespace PantryMate.API.Services
         public async Task<AssignItemResponse> AssignItemsToPantry(int accountId, int pantryId, AssignItemRequest request)
         {
             var pantry = await GetUserPantry(accountId, pantryId, true);
-            var items = _context.Item.Where(e => request.ItemIds.Contains(e.ItemId));
+            var requestedItemIds = request.Items.Select(e => e.ItemId);
+            var foundItems = _context.Item.Where(e => requestedItemIds.Contains(e.ItemId));
 
-            var assignedItemIds = pantry.PantryItems.Select(e => e.ItemId);
+            var existingAssignedItemIds = pantry.PantryItems.Select(e => e.ItemId);
             var assignedItemCount = 0;
             
-            foreach(var item in items)
+            foreach(var item in foundItems)
             {
-                if (!assignedItemIds.Contains(item.ItemId))
+                if (!existingAssignedItemIds.Contains(item.ItemId))
                 {
+                    var pantryItemRequest = request.Items.First(e => e.ItemId == item.ItemId);
                     pantry.PantryItems.Add(new PantryItem
                     {
                         ItemId = item.ItemId,
-                        PantryId = pantry.PantryId
+                        PantryId = pantry.PantryId,
+                        CurrentQuantity = pantryItemRequest.CurrentQuantity,
+                        MinimumQuantity = pantryItemRequest.MinimumQuantity
                     });
 
                     assignedItemCount++;
@@ -66,7 +70,7 @@ namespace PantryMate.API.Services
 
             return new AssignItemResponse
             {
-                TotalItemCount = request.ItemIds.Length,
+                TotalItemCount = requestedItemIds.Count(),
                 AssignedItemCount = assignedItemCount
             };
         }
