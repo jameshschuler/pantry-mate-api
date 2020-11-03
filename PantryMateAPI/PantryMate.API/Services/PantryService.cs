@@ -20,8 +20,9 @@ namespace PantryMate.API.Services
         IEnumerable<PantryResponse> GetAll(int accountId);
         Task<PantryResponse> GetPantry(int accountId, int pantryId);
         Task<IEnumerable<ItemResponse>> GetPantryItems(int accountId, int pantryId);
-        Task UpdatePantry(int accountId, int pantryId, UpdatePantryRequest request);
         Task<UnassignItemResponse> UnassignItemsFromPantry(int accountId, int pantryId, UnassignItemRequest request);
+        Task UpdatePantry(int accountId, int pantryId, UpdatePantryRequest request);
+        Task<UpdatePantryItemResponse> UpdatePantryItem(int accountId, int pantryId, UpdatePantryItemRequest request);
     }
 
     public class PantryService : IPantryService
@@ -124,25 +125,6 @@ namespace PantryMate.API.Services
             return _mapper.Map<IEnumerable<ItemResponse>>(items);
         }
 
-        public async Task UpdatePantry(int accountId, int pantryId, UpdatePantryRequest request)
-        {
-            var pantry = await GetUserPantry(accountId, pantryId);
-
-            // Check if the new pantry name is unique
-            var existingUserPantries = _context.Pantry.Where(e => e.AccountId == accountId);
-            var nameIsTaken = existingUserPantries.Any(e => e.Name == request.Name && e.Name != pantry.Name);
-            if (nameIsTaken)
-            {
-                throw new AppException($"Pantry name '{request.Name}' is already used.");
-            }
-
-            pantry.Name = request.Name;
-            pantry.Description = request.Description;
-            pantry.IsShared = request.IsShared;
-
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<UnassignItemResponse> UnassignItemsFromPantry(int accountId, int pantryId, UnassignItemRequest request)
         {
             var pantry = await GetUserPantry(accountId, pantryId, true);
@@ -182,6 +164,58 @@ namespace PantryMate.API.Services
             {
                 TotalItemCount = request.ItemIds.Length,
                 UnassignedItemCount = unassignedItemCount
+            };
+        }
+
+        public async Task UpdatePantry(int accountId, int pantryId, UpdatePantryRequest request)
+        {
+            var pantry = await GetUserPantry(accountId, pantryId);
+
+            // Check if the new pantry name is unique
+            var existingUserPantries = _context.Pantry.Where(e => e.AccountId == accountId);
+            var nameIsTaken = existingUserPantries.Any(e => e.Name == request.Name && e.Name != pantry.Name);
+            if (nameIsTaken)
+            {
+                throw new AppException($"Pantry name '{request.Name}' is already used.");
+            }
+
+            pantry.Name = request.Name;
+            pantry.Description = request.Description;
+            pantry.IsShared = request.IsShared;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<UpdatePantryItemResponse> UpdatePantryItem(int accountId, int pantryId, UpdatePantryItemRequest request)
+        {
+            var pantry = await GetUserPantry(accountId, pantryId, true);
+            var existingPantryItemIds = pantry.PantryItems.Select(e => e.ItemId);
+
+            var updatedItemCount = 0;
+            foreach (var pantryItem in request.Items)
+            {
+                if (existingPantryItemIds.Contains(pantryItem.ItemId))
+                {
+                    var item = pantry.PantryItems.First(e => e.ItemId == pantryItem.ItemId);
+                    
+                    item.CurrentQuantity = pantryItem.CurrentQuantity;
+                    item.MinimumQuantity = pantryItem.MinimumQuantity;
+
+                    updatedItemCount++;
+                }
+            }
+
+            if (updatedItemCount == 0)
+            {
+                throw new AppException("No items were updated.");
+            }
+
+            await _context.SaveChangesAsync();
+
+            return new UpdatePantryItemResponse 
+            {
+                TotalItemCount = request.Items.Length,
+                UpdatedItemCount = updatedItemCount
             };
         }
 
