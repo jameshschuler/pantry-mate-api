@@ -1,0 +1,17 @@
+<nav>
+    <mat-toolbar color="primary">
+        <span>Pantry Mate</span>
+        <span class="example-spacer"></span>
+
+        <mat-nav-list class="navigation">
+            <a mat-list-item [routerLink]="'/signin'" routerLinkActive="active">
+                <mat-icon aria-hidden="true">login</mat-icon>
+                Sign in
+            </a>
+            <a mat-list-item [routerLink]="'/signup'" routerLinkActive="active">
+                <mat-icon aria-hidden="true">person_add</mat-icon>
+                Sign up
+            </a>
+        </mat-nav-list>
+    </mat-toolbar>
+</nav>
