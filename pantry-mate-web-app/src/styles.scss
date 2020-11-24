@@ -5,6 +5,7 @@ html, body {
     width: 100%;
 }
 body { 
+    background-color: #ccc;
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 
@@ -34,6 +35,10 @@ body {
     
             mat-form-field {
                 width: 100%;
+            }
+
+            .submit-button {
+                margin-top: 1rem;
             }
         }
     }
