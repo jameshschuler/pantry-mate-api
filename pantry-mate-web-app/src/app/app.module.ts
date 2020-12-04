@@ -5,13 +5,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { SigninComponent } from './components/signin/signin.component';
@@ -19,8 +12,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AccountService } from './services/account.service';
-import { HealthCheckService } from './services/healthcheck.service';
 import { environment } from 'src/environments/environment';
+import { BaseUrlInterceptor } from './services/baseUrlInterceptor';
 
 
 @NgModule( {
@@ -32,15 +25,6 @@ import { environment } from 'src/environments/environment';
         SignupComponent
     ],
     imports: [
-        // Material Modules
-        MatToolbarModule,
-        MatIconModule,
-        MatCardModule,
-        MatListModule,
-        MatInputModule,
-        MatButtonModule,
-        MatFormFieldModule,
-
         // Angular
         BrowserModule,
         HttpClientModule,
@@ -52,8 +36,11 @@ import { environment } from 'src/environments/environment';
     exports: [
     ],
     providers: [
-        { provide: '', useValue: environment.baseApiUrl },
-        HealthCheckService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: BaseUrlInterceptor,
+            multi: true
+         },
         AccountService
     ],
     bootstrap: [AppComponent]

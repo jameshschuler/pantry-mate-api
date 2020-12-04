@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { AccountService } from 'src/app/services/account.service';
 
 @Component( {
@@ -14,12 +13,10 @@ export class SignupComponent implements OnInit {
     public usernameFormControl = new FormControl( '', [Validators.required] );
     public passwordFormControl = new FormControl( '', [Validators.required] );
 
-    public matcher = new MyErrorStateMatcher();
-
     constructor ( private accountService: AccountService, private formBuilder: FormBuilder ) {
         this.signupForm = this.formBuilder.group( {
-            username: '',
-            password: ''
+            username: ['', Validators.required],
+            password: ['', Validators.required],
         } );
     }
 
@@ -27,22 +24,15 @@ export class SignupComponent implements OnInit {
     }
 
     onSubmit ( signupData: any ) {
-        console.log( signupData );
+        // TODO: prevent calling service if there's an error
+
         // TODO: call service method
         this.accountService.register( signupData.username, signupData.password ).subscribe(
             ( response: any ) => {
                 console.log( response );
             },
             ( error: any ) => {
-                console.log( error );
+                console.log( 'error', error );
             } );
-    }
-}
-
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-    isErrorState ( control: FormControl | null, form: FormGroupDirective | NgForm | null ): boolean {
-        const isSubmitted = form && form.submitted;
-        return !!( control && control.invalid && ( control.dirty || control.touched || isSubmitted ) );
     }
 }

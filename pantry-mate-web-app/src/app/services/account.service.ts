@@ -9,7 +9,7 @@ export class AccountService {
     constructor ( private http: HttpClient ) { }
 
     register ( username: string, password: string ): Observable<any> {
-        return this.http.post( 'https://pantrymateapi.azurewebsites.net/api/v1/account/register', {
+        return this.http.post( 'account/register', {
             username,
             password
         } );

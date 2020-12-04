@@ -4,7 +4,6 @@
 
 export const environment = {
     production: false,
-    baseApiUrl: 'https://pantrymateapi.azurewebsites.net/',
 };
 
 /*
