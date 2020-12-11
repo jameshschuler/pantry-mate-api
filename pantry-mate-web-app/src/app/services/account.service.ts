@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable( {
@@ -12,6 +12,10 @@ export class AccountService {
         return this.http.post( 'account/register', {
             username,
             password
+        }, {
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
         } );
     }
 }

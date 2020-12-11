@@ -1,17 +1,20 @@
-<nav>
-    <span>Pantry Mate</span>
-    <!-- <mat-toolbar color="primary">
-        <span class="example-spacer"></span>
-
-        <mat-nav-list class="navigation">
-            <a mat-list-item [routerLink]="'/signin'" routerLinkActive="active">
-                <mat-icon aria-hidden="true">login</mat-icon>
-                Sign in
-            </a>
-            <a mat-list-item [routerLink]="'/signup'" routerLinkActive="active">
-                <mat-icon aria-hidden="true">person_add</mat-icon>
-                Sign up
-            </a>
-        </mat-nav-list>
-    </mat-toolbar> -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a routerLink="/" routerLinkActive="active" class="navbar-brand" href="#">Pantry Mate</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav mr-auto">
+                <!-- <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link" href="#">Features</a>
+                <a class="nav-link" href="#">Pricing</a> -->
+            </div>
+            <div class="d-flex">
+                <a routerLink="/login" routerLinkActive="active" class="nav-link" href="#">Log In</a>
+                <a routerLink="/signup" routerLinkActive="active" class="nav-link btn-primary" href="#">Sign Up</a>
+            </div>
+        </div>
+    </div>
 </nav>

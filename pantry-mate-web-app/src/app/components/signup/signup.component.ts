@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { AppError } from 'src/app/models/error';
+import { User } from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
 
 @Component( {
@@ -8,31 +10,28 @@ import { AccountService } from 'src/app/services/account.service';
     styleUrls: ['./signup.component.scss']
 } )
 export class SignupComponent implements OnInit {
+    public user = new User();
+    public loading = false;
+    public error: AppError | null = null;
 
-    public signupForm: FormGroup;
-    public usernameFormControl = new FormControl( '', [Validators.required] );
-    public passwordFormControl = new FormControl( '', [Validators.required] );
-
-    constructor ( private accountService: AccountService, private formBuilder: FormBuilder ) {
-        this.signupForm = this.formBuilder.group( {
-            username: ['', Validators.required],
-            password: ['', Validators.required],
-        } );
+    constructor ( private accountService: AccountService ) {
     }
 
     ngOnInit (): void {
     }
 
-    onSubmit ( signupData: any ) {
-        // TODO: prevent calling service if there's an error
+    save ( signupForm: NgForm ) {
+        console.log( signupForm.form );
+        console.log( JSON.stringify( signupForm.value ) );
+        this.loading = true;
+        this.accountService.register( signupForm.value.username, signupForm.value.password ).subscribe( response => {
+            this.loading = false;
+            signupForm.resetForm();
 
-        // TODO: call service method
-        this.accountService.register( signupData.username, signupData.password ).subscribe(
-            ( response: any ) => {
-                console.log( response );
-            },
-            ( error: any ) => {
-                console.log( 'error', error );
-            } );
+            // TODO: redirect to login?
+        }, err => {
+            this.error = err.error;
+            this.loading = false;
+        } );
     }
 }
