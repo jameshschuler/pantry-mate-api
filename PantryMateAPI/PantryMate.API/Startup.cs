@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCoreRateLimit;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -48,6 +49,18 @@ namespace PantryMate.API
             services.AddControllers();
             services.AddHealthChecks();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            // needed to load configuration from appsettings.json
+            services.AddOptions();
+
+            // needed to store rate limit counters and ip rules
+            services.AddMemoryCache();
+
+            services.Configure<IpRateLimitOptions>(Configuration.GetSection("IPRateLimiting"));
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddHttpContextAccessor();
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -103,6 +116,7 @@ namespace PantryMate.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseIpRateLimiting();
             app.UseHttpsRedirection();
             app.UseRouting();
 
