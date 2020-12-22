@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from './models/user';
+import { AccountService } from './services/account.service';
 
 @Component( {
     selector: 'app-root',
@@ -6,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./app.component.scss']
 } )
 export class AppComponent implements OnInit {
-    title = 'pantry-mate';
+    public title = 'pantry-mate';
+    public user: User | null = null;
 
-    constructor () {
-
+    constructor ( private accountService: AccountService ) {
+        this.accountService.user.subscribe( x => this.user = x );
     }
 
     ngOnInit (): void {

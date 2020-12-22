@@ -11,28 +11,34 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AccountService } from './services/account.service';
-import { environment } from 'src/environments/environment';
 import { BaseUrlInterceptor } from './services/baseUrlInterceptor';
 import { LoginComponent } from './components/login/login.component';
 import { LandingComponent } from './components/landing/landing.component';
+import { AlertComponent } from './components/alert/alert.component';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { ErrorInterceptor } from './helpers/error.interceptor';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 @NgModule( {
     declarations: [
+        AlertComponent,
         AppComponent,
+        DashboardComponent,
         NavbarComponent,
         LoginComponent,
         FooterComponent,
         SignupComponent,
-        LandingComponent
+        LandingComponent,
+        DashboardComponent
     ],
     imports: [
         // Angular
         BrowserModule,
+        FormsModule,
         HttpClientModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        FormsModule,
         ReactiveFormsModule
     ],
     exports: [
@@ -43,6 +49,8 @@ import { LandingComponent } from './components/landing/landing.component';
             useClass: BaseUrlInterceptor,
             multi: true
         },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         AccountService
     ],
     bootstrap: [AppComponent]

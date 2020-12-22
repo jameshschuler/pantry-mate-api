@@ -1,1 +1,45 @@
-<p>login works!</p>
+<div class="card mt-5 col-md-6 offset-md-3">
+    <div class="card-header">
+        Log in to get started
+    </div>
+
+    <div class="card-body">
+        <form novalidate (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm">
+            <div class="alert alert-danger" role="alert" *ngIf="error !== null">
+                {{ error ? error!.message : 'Error occurred while processing your request. Please try again later!' }}
+            </div>
+            <div class="form-group row mb-2">
+                <label for="username" class="col-md-2 col-form-label">Username</label>
+                <div class="col-md-8">
+                    <input type="text" id="username" placeholder="Username (required)" required class="form-control"
+                        [(ngModel)]=user.username name="username" #usernameVar="ngModel"
+                        [ngClass]="{'is-invalid': (usernameVar.touched || usernameVar.dirty) && !usernameVar.valid}">
+                    <span class="invalid-feedback">
+                        <span *ngIf="usernameVar.errors?.required">
+                            Please enter a username.
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row mb-2">
+                <label for="password" class="col-md-2 col-form-label">Password</label>
+                <div class="col-md-8">
+                    <input type="password" id="password" placeholder="Password (required)" required class="form-control"
+                        [(ngModel)]=user.password name="password" #passwordVar="ngModel"
+                        [ngClass]="{'is-invalid': (passwordVar.touched || passwordVar.dirty) && !passwordVar.valid}">
+                    <span class="invalid-feedback">
+                        <span *ngIf="passwordVar.errors?.required">
+                            Please enter a password.
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row mt-3 mb-2">
+                <div class="offset-md-2 col-md-4">
+                    <button class="btn btn-primary mr-3" type="submit" style="width: 125px;"
+                        [disabled]="!signupForm.valid || loading">{{ loading ? 'Logging in...' : 'Log in' }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

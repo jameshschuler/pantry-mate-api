@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { AccountService } from 'src/app/services/account.service';
 
-@Component({
-  selector: 'app-landing',
-  templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.scss']
-})
+@Component( {
+    selector: 'app-landing',
+    templateUrl: './landing.component.html',
+    styleUrls: ['./landing.component.scss']
+} )
 export class LandingComponent implements OnInit {
 
-  constructor() { }
+    constructor ( private accountService: AccountService ) { }
 
-  ngOnInit(): void {
-  }
+    ngOnInit (): void {
+        console.log( this.accountService.userValue );
+    }
 
 }

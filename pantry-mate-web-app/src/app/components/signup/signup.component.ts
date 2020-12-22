@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 import { AppError } from 'src/app/models/error';
-import { User } from 'src/app/models/user';
+import { UserFormModel } from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component( {
     selector: 'app-signup',
@@ -10,28 +13,31 @@ import { AccountService } from 'src/app/services/account.service';
     styleUrls: ['./signup.component.scss']
 } )
 export class SignupComponent implements OnInit {
-    public user = new User();
+    public user = new UserFormModel();
     public loading = false;
     public error: AppError | null = null;
 
-    constructor ( private accountService: AccountService ) {
+    constructor ( private accountService: AccountService, private alertService: AlertService, private route: ActivatedRoute, private router: Router ) {
     }
 
     ngOnInit (): void {
     }
 
     save ( signupForm: NgForm ) {
-        console.log( signupForm.form );
-        console.log( JSON.stringify( signupForm.value ) );
-        this.loading = true;
-        this.accountService.register( signupForm.value.username, signupForm.value.password ).subscribe( response => {
-            this.loading = false;
-            signupForm.resetForm();
+        this.alertService.clear();
 
-            // TODO: redirect to login?
-        }, err => {
-            this.error = err.error;
-            this.loading = false;
-        } );
+        this.loading = true;
+
+        this.accountService.register( signupForm.value.username, signupForm.value.password )
+            .pipe( first() )
+            .subscribe(
+                data => {
+                    this.alertService.success( 'Registration successful', { keepAfterRouteChange: true } );
+                    this.router.navigate( ['/login'], { relativeTo: this.route } );
+                },
+                error => {
+                    this.alertService.error( error, { autoClose: false } );
+                    this.loading = false;
+                } );
     }
 }

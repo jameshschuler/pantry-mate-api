@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    baseApiUrl: 'https://pantrymateapi.azurewebsites.net/',
+    apiUrl: 'https://pantrymateapi.azurewebsites.net/api/v1',
 };

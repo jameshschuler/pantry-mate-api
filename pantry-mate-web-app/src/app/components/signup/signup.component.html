@@ -42,8 +42,11 @@
             </div>
             <div class="form-group row mt-3 mb-2">
                 <div class="offset-md-2 col-md-4">
-                    <button class="btn btn-primary mr-3" type="submit" style="width: 100px;"
-                        [disabled]="!signupForm.valid || loading">{{ loading ? 'Signing up...' : 'Sign up' }}</button>
+                    <button class="btn btn-primary mr-3" type="submit" style="width: 150px;"
+                        [disabled]="!signupForm.valid || loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        {{ loading ? 'Signing up...' : 'Get Started'}}
+                    </button>
                 </div>
             </div>
         </form>
