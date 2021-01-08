@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h2 class="mb-3">Items</h2>
+
+        <div class="table-responsive">
+            <table class="table table-hover mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Unit of Measure</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of items">
+                        <td>{{item.name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-info mt-2" colspan="6" role="alert" *ngIf="items.length === 0">
+                <i class="fas fa-fw fa-info-circle mr-2"></i>
+                No items were found. Click the 'New Item' button to get started!
+            </div>
+        </div>
+    </div>
+</div>

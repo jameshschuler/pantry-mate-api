@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user';
-import { AccountService } from 'src/app/services/account.service';
-
 @Component( {
     selector: 'navbar',
     templateUrl: './navbar.component.html',
@@ -10,12 +8,8 @@ import { AccountService } from 'src/app/services/account.service';
 export class NavbarComponent implements OnInit {
     @Input() user: User | null = null;
 
-    constructor ( private accountService: AccountService ) { }
+    constructor () { }
 
     ngOnInit (): void {
-    }
-
-    logout () {
-        this.accountService.logout();
     }
 }

@@ -1,0 +1,24 @@
+#app-nav {
+    .nav-item {
+        .nav-link {
+            &.active {
+                border-right: 2px solid #0d6efd;
+                font-weight: 500;
+                
+                span {
+                    color: #333;
+                }
+
+                svg {
+                    color: #0d6efd;
+                }
+            }
+
+            color: #ccc;
+
+            span {
+                font-size: 1.15rem;
+            }
+        }
+    }
+}

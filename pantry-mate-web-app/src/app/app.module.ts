@@ -18,6 +18,9 @@ import { AlertComponent } from './components/alert/alert.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AppNavigationComponent } from './components/app-navigation/app-navigation.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ItemsComponent } from './components/items/items.component';
 
 
 @NgModule( {
@@ -30,7 +33,10 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
         FooterComponent,
         SignupComponent,
         LandingComponent,
-        DashboardComponent
+        DashboardComponent,
+        AppNavigationComponent,
+        ProfileComponent,
+        ItemsComponent
     ],
     imports: [
         // Angular

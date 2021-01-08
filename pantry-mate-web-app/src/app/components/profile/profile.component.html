@@ -1,0 +1,15 @@
+<button *ngIf="user" (click)="logout()" class="btn btn-light w-100 d-flex align-items-center justify-content-between">
+    <span class="fw-bold mr-3">Logout</span>
+    <i class="fas fa-sign-out-alt fa-fw"></i>
+</button>
+
+<div id="profile" class="d-flex flex-column justify-content-center align-items-center mb-5">
+    <div class="mt-5 mb-3">
+        <img id="profile-image" src="../../../assets/male_avatar.svg" alt="">
+    </div>
+    <h4>{{fullName}}</h4>
+</div>
+
+<div id="activity">
+    <h4>Recent Activity</h4>
+</div>
