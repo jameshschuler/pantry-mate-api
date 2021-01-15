@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ItemsComponent } from './components/items/items.component';
+import { NewItemComponent } from './components/items/new-item/new-item.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
@@ -13,6 +14,7 @@ const routes: Routes = [
     { path: 'signup', component: SignupComponent, canActivate: [LoggedInAuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'items', component: ItemsComponent, canActivate: [AuthGuard] },
+    { path: 'items/new', component: NewItemComponent, canActivate: [AuthGuard] },
     { path: '', component: LandingComponent, canActivate: [LoggedInAuthGuard] },
     { path: '**', redirectTo: '' } // TODO: add notfound component
 ];

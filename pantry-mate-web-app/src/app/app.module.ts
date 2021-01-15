@@ -11,6 +11,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AccountService } from './services/account.service';
+import { ItemService } from './services/item.service';
 import { BaseUrlInterceptor } from './services/baseUrlInterceptor';
 import { LoginComponent } from './components/login/login.component';
 import { LandingComponent } from './components/landing/landing.component';
@@ -21,6 +22,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AppNavigationComponent } from './components/app-navigation/app-navigation.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ItemsComponent } from './components/items/items.component';
+import { LoaderComponent } from './components/loader/loader.component';
+import { NewItemComponent } from './components/items/new-item/new-item.component';
 
 
 @NgModule( {
@@ -36,7 +39,9 @@ import { ItemsComponent } from './components/items/items.component';
         DashboardComponent,
         AppNavigationComponent,
         ProfileComponent,
-        ItemsComponent
+        ItemsComponent,
+        LoaderComponent,
+        NewItemComponent
     ],
     imports: [
         // Angular
@@ -57,7 +62,8 @@ import { ItemsComponent } from './components/items/items.component';
         },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-        AccountService
+        AccountService,
+        ItemService
     ],
     bootstrap: [AppComponent]
 } )
