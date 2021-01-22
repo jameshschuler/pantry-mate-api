@@ -24,6 +24,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ItemsComponent } from './components/items/items.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { NewItemComponent } from './components/items/new-item/new-item.component';
+import { BrandService } from './services/brand.service';
 
 
 @NgModule( {
@@ -63,6 +64,7 @@ import { NewItemComponent } from './components/items/new-item/new-item.component
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         AccountService,
+        BrandService,
         ItemService
     ],
     bootstrap: [AppComponent]

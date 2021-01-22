@@ -4,7 +4,7 @@
     </div>
 
     <div class="card-body">
-        <form novalidate (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm">
+        <form novalidate (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
             <div class="alert alert-danger" role="alert" *ngIf="error !== null">
                 {{ error ? error!.message : 'Error occurred while processing your request. Please try again later!' }}
             </div>
@@ -37,7 +37,7 @@
             <div class="form-group row mt-3 mb-2">
                 <div class="offset-md-2 col-md-4">
                     <button class="btn btn-primary mr-3" type="submit" style="width: 125px;"
-                        [disabled]="!signupForm.valid || loading">{{ loading ? 'Logging in...' : 'Log in' }}</button>
+                        [disabled]="!loginForm.valid || loading">{{ loading ? 'Logging in...' : 'Log in' }}</button>
                 </div>
             </div>
         </form>

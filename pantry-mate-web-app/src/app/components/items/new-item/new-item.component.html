@@ -1,1 +1,62 @@
-<p>new-item works!</p>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-3">New Item</h2>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <form novalidate (ngSubmit)="onSubmit(newItemForm)" #newItemForm="ngForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-danger" role="alert" *ngIf="error !== null">
+                        {{ error ? error!.message : 'Error occurred while processing your request. Please try again later!' }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Name (required)" required [(ngModel)]=item.name
+                            #nameVar="ngModel" [ngClass]="{'is-invalid': (nameVar.touched || nameVar.dirty) && !nameVar.valid}">
+                        <span class="invalid-feedback">
+                            <span *ngIf="nameVar.errors?.required">
+                                Please enter a name.
+                            </span>
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea rows="5" class="form-control" name="description" id="description"></textarea>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="mb-3">
+                        <label for="uom" class="form-label">Unit of Measure</label>
+                        <select class="form-select" id="uom" name="uom">
+                            <option selected>Select</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" *ngIf="brands$ | async; let brands">
+                        <label for="brand" class="form-label">Brand</label>
+                        <select class="form-select" id="brand" name="brand">
+                            <option selected>Select</option>
+                            <option *ngFor="let brand of brands" value="{{brand.brandId}}">{{brand.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                    <button type="submit" class="btn btn-primary" [disabled]="!newItemForm.valid || loading">{{ loading
+                        ? 'Submitting...' : 'Submit' }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
