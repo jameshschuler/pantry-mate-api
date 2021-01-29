@@ -24,6 +24,7 @@ namespace PantryMate.API.Helpers
                 .ForMember(e => e.AbbreviatedUnitOfMeasure, opt => opt.MapFrom(e => e.UnitOfMeasure.Abbreviation));
             CreateMap<CreateItemRequest, Item>();
             CreateMap<UpdateItemRequest, Item>();
+            CreateMap<UnitOfMeasure, UnitOfMeasureResponse>();
         }
     }
 }

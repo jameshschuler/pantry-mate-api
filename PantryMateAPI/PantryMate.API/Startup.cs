@@ -44,6 +44,7 @@ namespace PantryMate.API
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IPantryService, PantryService>();
             services.AddScoped<IItemService, ItemService>();
+            services.AddScoped<IUnitOfMeasureService, UnitOfMeasureService>();
 
             services.AddCors();
             services.AddControllers();
