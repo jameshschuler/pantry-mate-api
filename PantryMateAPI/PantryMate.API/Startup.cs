@@ -126,6 +126,7 @@ namespace PantryMate.API
                 .SetIsOriginAllowed(origin => true)
                 .AllowAnyMethod()
                 .AllowAnyHeader()
+                .WithOrigins("http://localhost:4200")
                 .AllowCredentials());
 
             // global error handler
